@@ -1,0 +1,86 @@
+name: Check
+
+on: [push, pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-2025]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+      - name: Check generated HCL adapter
+        shell: pwsh
+        run: |
+          go install github.com/hashicorp/packer-plugin-sdk/cmd/packer-sdc@v0.6.13
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          $env:GOFILE = 'config.go'
+          $env:GOPACKAGE = 'provisioner'
+          Push-Location provisioner
+          packer-sdc mapstructure-to-hcl2 -type Config
+          Pop-Location
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          git diff --exit-code -- provisioner/config.hcl2spec.go
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+      - name: Format
+        shell: pwsh
+        run: |
+          $files = @(git ls-files '*.go')
+          $unformatted = @(gofmt -l $files)
+          if ($unformatted.Count) { throw ($unformatted -join "`n") }
+      - run: go vet ./...
+      - run: go run ./cmd/doccheck main.go provisioner internal guest cmd test
+      - name: Report schema
+        shell: pwsh
+        run: |
+          if (-not (Get-Content docs/sample-report.json -Raw | Test-Json -SchemaFile docs/report.schema.json)) { throw 'Sample report does not match schema' }
+      - run: go test ./...
+      - name: Build and validate plugin
+        shell: pwsh
+        run: |
+          go build -ldflags '-X main.versionPrerelease=' -o bin/packer-plugin-windows-checkup${{ runner.os == 'Windows' && '.exe' || '' }} .
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          & ./bin/packer-plugin-windows-checkup${{ runner.os == 'Windows' && '.exe' || '' }} describe
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+      - uses: hashicorp/setup-packer@v3
+      - name: Validate SDK configuration
+        shell: pwsh
+        env:
+          PKR_VAR_winrm_host: 192.0.2.1
+          PKR_VAR_winrm_username: fixture
+          PKR_VAR_winrm_password: fixture
+        run: |
+          packer plugins install --path bin/packer-plugin-windows-checkup${{ runner.os == 'Windows' && '.exe' || '' }} github.com/larskroghdk/windows-checkup
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          packer validate examples/local
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+      - name: PowerShell readers
+        if: runner.os == 'Windows'
+        shell: powershell
+        run: |
+          Install-Module PSScriptAnalyzer -RequiredVersion 1.22.0 -Scope CurrentUser -Force
+          Install-Module Pester -RequiredVersion 5.6.1 -Scope CurrentUser -Force -SkipPublisherCheck
+          ./scripts/check-powershell.ps1
+          Import-Module Pester -RequiredVersion 5.6.1
+          ./scripts/test-powershell.ps1
+  cross-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+      - shell: bash
+        run: |
+          for os in linux darwin windows; do
+            for arch in amd64 arm64; do
+              GOOS=$os GOARCH=$arch CGO_ENABLED=0 go build -o /tmp/checkup-$os-$arch .
+            done
+          done

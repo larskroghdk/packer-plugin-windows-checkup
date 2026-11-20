@@ -1,0 +1,9 @@
+.cache/
+/packer_cache/
+/bin/
+/dist/
+/reports/
+*.exe
+coverage.out
+testResults.xml
+test/integration/*.json

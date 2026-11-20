@@ -1,0 +1,155 @@
+{
+  "schemaVersion": "1.0",
+  "plugin": "packer-plugin-windows-checkup",
+  "pluginVersion": "0.1.0-dev",
+  "computerName": "ILLUSTRATIVE-SAMPLE",
+  "operatingSystem": {
+    "caption": "Microsoft Windows Server 2022 Standard",
+    "build": 20348,
+    "architecture": "64-bit",
+    "product_type": 3
+  },
+  "baselineId": "ws2022",
+  "baselineVersion": "FINAL",
+  "baselineFingerprint": "5e8a91ab445bdb612792ecd7490ebb56fcffbe9d4e4ce6885c4720371c908734",
+  "sourceCommit": "8dc70d2c81be4515ad243dfbe288d61151ab722d",
+  "profile": "non_domain_joined",
+  "startedAt": "2026-11-20T09:00:00Z",
+  "endedAt": "2026-11-20T09:00:02Z",
+  "durationSeconds": 2,
+  "executionErrors": [],
+  "summary": {
+    "total": 3,
+    "compliant": 1,
+    "nonCompliant": 1,
+    "notApplicable": 0,
+    "notConfigured": 1,
+    "errors": 0,
+    "compliancePercentage": 33.333333333333336,
+    "evaluated": 3,
+    "byCategory": {
+      "MSFT Internet Explorer 11 - Computer": {
+        "total": 3,
+        "compliant": 1,
+        "nonCompliant": 1,
+        "notApplicable": 0,
+        "notConfigured": 1,
+        "errors": 0
+      }
+    },
+    "bySeverity": {
+      "Medium": {
+        "total": 3,
+        "compliant": 1,
+        "nonCompliant": 1,
+        "notApplicable": 0,
+        "notConfigured": 1,
+        "errors": 0
+      }
+    }
+  },
+  "findings": [
+    {
+      "id": "registry:HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Ext\\RunThisTimeEnabled",
+      "name": "Windows Components\\Internet Explorer\\Security Features\\Add-on Management > Remove \"Run this time\" button for outdated ActiveX controls in Internet Explorer",
+      "description": "Windows Components\\Internet Explorer\\Security Features\\Add-on Management > Remove \"Run this time\" button for outdated ActiveX controls in Internet Explorer",
+      "category": "MSFT Internet Explorer 11 - Computer",
+      "severity": "Medium",
+      "supportedOperatingSystems": {
+        "product_type": "server",
+        "builds": [
+          20348
+        ]
+      },
+      "expectedValue": 0,
+      "actualValue": 0,
+      "status": "Compliant",
+      "evidence": {
+        "definition": {
+          "id": "registry:HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Ext\\RunThisTimeEnabled",
+          "kind": "registry",
+          "description": "Windows Components\\Internet Explorer\\Security Features\\Add-on Management > Remove \"Run this time\" button for outdated ActiveX controls in Internet Explorer",
+          "component": "MSFT Internet Explorer 11 - Computer",
+          "registry": {
+            "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Ext",
+            "name": "RunThisTimeEnabled",
+            "type": "REG_DWORD",
+            "data": "0"
+          }
+        },
+        "present": true,
+        "actualType": "REG_DWORD"
+      },
+      "remediation": null,
+      "validatedAt": "2026-11-20T09:00:01Z"
+    },
+    {
+      "id": "registry:HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Ext\\VersionCheckEnabled",
+      "name": "Windows Components\\Internet Explorer\\Security Features\\Add-on Management > Turn off blocking of outdated ActiveX controls for Internet Explorer",
+      "description": "Windows Components\\Internet Explorer\\Security Features\\Add-on Management > Turn off blocking of outdated ActiveX controls for Internet Explorer",
+      "category": "MSFT Internet Explorer 11 - Computer",
+      "severity": "Medium",
+      "supportedOperatingSystems": {
+        "product_type": "server",
+        "builds": [
+          20348
+        ]
+      },
+      "expectedValue": 1,
+      "actualValue": 999,
+      "status": "NonCompliant",
+      "evidence": {
+        "definition": {
+          "id": "registry:HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Ext\\VersionCheckEnabled",
+          "kind": "registry",
+          "description": "Windows Components\\Internet Explorer\\Security Features\\Add-on Management > Turn off blocking of outdated ActiveX controls for Internet Explorer",
+          "component": "MSFT Internet Explorer 11 - Computer",
+          "registry": {
+            "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Ext",
+            "name": "VersionCheckEnabled",
+            "type": "REG_DWORD",
+            "data": "1"
+          }
+        },
+        "present": true,
+        "actualType": "REG_DWORD"
+      },
+      "remediation": "Configure the expected baseline policy.",
+      "validatedAt": "2026-11-20T09:00:01Z"
+    },
+    {
+      "id": "registry:HKLM\\Software\\Policies\\Microsoft\\Internet Explorer\\Download\\RunInvalidSignatures",
+      "name": "Windows Components\\Internet Explorer\\Internet Control Panel\\Advanced Page > Allow software to run or install even if the signature is invalid",
+      "description": "Windows Components\\Internet Explorer\\Internet Control Panel\\Advanced Page > Allow software to run or install even if the signature is invalid",
+      "category": "MSFT Internet Explorer 11 - Computer",
+      "severity": "Medium",
+      "supportedOperatingSystems": {
+        "product_type": "server",
+        "builds": [
+          20348
+        ]
+      },
+      "expectedValue": 0,
+      "actualValue": null,
+      "status": "NotConfigured",
+      "evidence": {
+        "definition": {
+          "id": "registry:HKLM\\Software\\Policies\\Microsoft\\Internet Explorer\\Download\\RunInvalidSignatures",
+          "kind": "registry",
+          "description": "Windows Components\\Internet Explorer\\Internet Control Panel\\Advanced Page > Allow software to run or install even if the signature is invalid",
+          "component": "MSFT Internet Explorer 11 - Computer",
+          "registry": {
+            "path": "Software\\Policies\\Microsoft\\Internet Explorer\\Download",
+            "name": "RunInvalidSignatures",
+            "type": "REG_DWORD",
+            "data": "0"
+          }
+        },
+        "present": false,
+        "actualType": null
+      },
+      "remediation": "Configure the expected baseline policy.",
+      "validatedAt": "2026-11-20T09:00:01Z"
+    }
+  ]
+}

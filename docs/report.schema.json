@@ -1,0 +1,317 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/larskroghdk/packer-plugin-windows-checkup/blob/main/docs/report.schema.json",
+  "title": "Windows checkup report v1.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "plugin",
+    "pluginVersion",
+    "computerName",
+    "operatingSystem",
+    "baselineId",
+    "baselineVersion",
+    "baselineFingerprint",
+    "sourceCommit",
+    "profile",
+    "startedAt",
+    "endedAt",
+    "durationSeconds",
+    "executionErrors",
+    "summary",
+    "findings"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "plugin": {
+      "type": "string",
+      "const": "packer-plugin-windows-checkup"
+    },
+    "pluginVersion": {
+      "type": "string"
+    },
+    "computerName": {
+      "type": "string"
+    },
+    "operatingSystem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "caption",
+        "build",
+        "architecture",
+        "product_type"
+      ],
+      "properties": {
+        "product_name": {
+          "type": "string"
+        },
+        "edition_id": {
+          "type": "string"
+        },
+        "installation_type": {
+          "type": "string"
+        },
+        "display_version": {
+          "type": "string"
+        },
+        "caption": {
+          "type": "string"
+        },
+        "architecture": {
+          "type": "string"
+        },
+        "major": {
+          "type": "integer"
+        },
+        "minor": {
+          "type": "integer"
+        },
+        "build": {
+          "type": "integer"
+        },
+        "ubr": {
+          "type": "integer"
+        },
+        "product_type": {
+          "type": "integer"
+        },
+        "is_64bit_process": {
+          "type": "boolean"
+        }
+      }
+    },
+    "baselineId": {
+      "type": "string"
+    },
+    "baselineVersion": {
+      "type": "string"
+    },
+    "baselineFingerprint": {
+      "type": "string"
+    },
+    "sourceCommit": {
+      "type": "string"
+    },
+    "profile": {
+      "type": "string"
+    },
+    "startedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "endedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "durationSeconds": {
+      "type": "number"
+    },
+    "executionErrors": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "total",
+        "compliant",
+        "nonCompliant",
+        "notApplicable",
+        "notConfigured",
+        "errors",
+        "evaluated",
+        "compliancePercentage",
+        "byCategory",
+        "bySeverity"
+      ],
+      "properties": {
+        "total": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "compliant": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "nonCompliant": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "notApplicable": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "notConfigured": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "errors": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "evaluated": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "compliancePercentage": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "byCategory": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/counts"
+          }
+        },
+        "bySeverity": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/counts"
+          }
+        }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "name",
+          "description",
+          "category",
+          "severity",
+          "status",
+          "validatedAt",
+          "expectedValue",
+          "actualValue",
+          "evidence",
+          "supportedOperatingSystems",
+          "remediation"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "Low",
+              "Medium",
+              "High",
+              "Critical"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "Compliant",
+              "NonCompliant",
+              "NotApplicable",
+              "Error",
+              "NotConfigured"
+            ]
+          },
+          "validatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "expectedValue": {},
+          "actualValue": {},
+          "evidence": {
+            "type": "object"
+          },
+          "supportedOperatingSystems": {
+            "type": "object",
+            "required": [
+              "product_type",
+              "builds"
+            ],
+            "properties": {
+              "product_type": {
+                "enum": [
+                  "server",
+                  "workstation"
+                ]
+              },
+              "builds": {
+                "type": "array",
+                "items": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "remediation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "total",
+        "compliant",
+        "nonCompliant",
+        "notApplicable",
+        "notConfigured",
+        "errors"
+      ],
+      "properties": {
+        "total": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "compliant": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "nonCompliant": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "notApplicable": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "notConfigured": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "errors": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    }
+  }
+}

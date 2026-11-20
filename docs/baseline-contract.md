@@ -1,0 +1,9 @@
+# Baseline contract 1.0
+
+The authoritative contract is the JSON model in `internal/baseline/baseline.go`, imported from windows-harden without changing payload semantics. Six data files are copied byte-for-byte. Every control uses its original identifier. Profile overrides replace controls by identifier rather than introducing an additional requirement. Unknown kinds, inconsistent payloads, duplicate IDs and overlapping OS applicability fail catalog loading.
+
+`data-manifest.json` records the source Git commit and SHA-256 of each data file. Reports fingerprint the exact selected embedded file, covering both domain profiles and source exclusions. The plugin has no runtime or module dependency on windows-harden.
+
+To update: review the authoritative project's catalog, readers, lifecycle classification, importer exclusions and application flow; copy its data and compatible model changes; regenerate the hash manifest and full inventory; review any new control kinds; add read-only readers and deterministic comparisons; run all tests and live validation on affected OS/profile combinations. Update `SourceCommit` and provenance together. `TestSnapshotFingerprint` prevents unnoticed data changes. Never edit expected settings to make an audit pass. Incompatible baseline payload changes require a new contract version. Incompatible report changes require a new report schema version.
+
+No upstream writer, rollback task, WinRM protection action, or credential/session collector is included. Exporting security policy and audit policy creates temporary files but does not apply settings. Baseline exclusions such as user GPOs, domain-controller policy, and hardware-dependent Credential Guard are recorded in the inventory rather than silently converted into extra checks. Audit results concern configured policy, not runtime subsystem health.

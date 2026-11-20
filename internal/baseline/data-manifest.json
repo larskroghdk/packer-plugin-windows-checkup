@@ -1,0 +1,12 @@
+{
+  "contractVersion": "1.0",
+  "sourceCommit": "8dc70d2c81be4515ad243dfbe288d61151ab722d",
+  "files": {
+    "win11-24h2.json": "f689c4fe0dfc40e87d2860e3c42e989142c7b0200252c601d590bd189e513494",
+    "win11-25h2.json": "4d432143c1faa591421dbe90bcf2576fa4963a6175f97af8da012954c02f02d2",
+    "win11-26h2.json": "f33f9b0d731f0e66195098db4d4585fb4fbf198bad95a4d2aadd6f872e089b63",
+    "ws2019-member.json": "9ddd994e92fa9246641de815212597f04caf04d3cdbc85197b5b5c262a146d82",
+    "ws2022.json": "5e8a91ab445bdb612792ecd7490ebb56fcffbe9d4e4ce6885c4720371c908734",
+    "ws2025-2602.json": "60ea3ce012d9bcbd9910870997a8e6cd7232dc3a6f640f30d7c03e9bccf4e220"
+  }
+}
