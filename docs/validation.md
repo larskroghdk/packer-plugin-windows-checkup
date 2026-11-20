@@ -1,8 +1,8 @@
-# Implementation validation — 2026-11-20
+# 🧪 Implementation validation — 2026-11-20
 
 The baseline inventory was derived from windows-harden commit `8dc70d2c81be4515ad243dfbe288d61151ab722d`. Six baseline files contain 2,187 entries and 18 non-domain-joined overrides. Tests exercise every entry in both profiles, including matching values, mismatches, missing configuration, missing reader data, and reader errors. File hashes verify the source snapshot.
 
-Executed successfully:
+✅ **Executed successfully:**
 
 - Go formatting and the source project's documentation checker.
 - `go test ./...`, including baseline selection, OS lifecycle classification, typed comparison, SID sets, report summaries, JSON serialization, atomic report replacement, SDK configuration, host reporting, enforcement and cancellation.

@@ -1,4 +1,4 @@
-# Complete source control inventory
+# 🗂️ Complete source control inventory
 
 Source commit: `8dc70d2c81be4515ad243dfbe288d61151ab722d`. Definitions are copied byte-for-byte; hashes are in `internal/baseline/data-manifest.json`.
 

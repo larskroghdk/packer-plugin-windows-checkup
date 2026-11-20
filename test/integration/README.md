@@ -1,4 +1,4 @@
-# Live validation
+# 🧪 Live validation
 
 Use a disposable Windows guest with an elevated WinRM account. No live guest or credentials are included in this repository.
 

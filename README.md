@@ -1,10 +1,10 @@
-# packer-plugin-windows-checkup
+# 🛡️ packer-plugin-windows-checkup
 
 A native HashiCorp Packer provisioner that independently audits the Windows policies implemented by [windows-harden](https://github.com/larskroghdk/packer-plugin-windows-harden). It reads actual configuration over WinRM and writes a structured JSON report on the Packer host. It never applies security policy, restarts services, changes firewall rules, or reboots Windows.
 
 Author: Lars Krogh. Plugin version: 0.1.0 (development). License: MPL-2.0.
 
-## Baseline and supported systems
+## 🖥️ Baseline and supported systems
 
 The six baseline files are an exact snapshot of windows-harden commit `8dc70d2c81be4515ad243dfbe288d61151ab722d`, including its non-domain-joined overrides and Microsoft package provenance. See the [complete inventory](docs/control-inventory.md), [hash manifest](internal/baseline/data-manifest.json), and [baseline maintenance contract](docs/baseline-contract.md).
 
@@ -21,7 +21,7 @@ Selection follows the source's lifecycle table and edition restrictions at execu
 
 The audit verifies exactly what the hardening plugin configures: registry values and types, local account policies, SID assignments, advanced audit subcategories, and service startup types. Defender, firewall, SMB, TLS, and authentication policies are covered where present in those definitions. The source does not implement independent optional-feature, firewall-rule, service-running-state, or runtime Defender health requirements. Stored policy compliance does not establish effective runtime health or prove that domain policy will not override it later. Registry absence is compliant only for an explicit `ABSENT` requirement. An absent service is `NotApplicable` after the reader verifies the service key is absent.
 
-## Installation and use
+## 🚀 Installation and use
 
 Requires Go 1.26.10, Packer with plugin protocol x5 support, and an elevated 64-bit Windows PowerShell 5.1 WinRM session on the guest. Build locally before the first release is published:
 
@@ -57,7 +57,7 @@ build {
 
 The builder must be defined separately. A complete [null-builder example](examples/local/windows-checkup.pkr.hcl) audits an existing VM. Checkup can run after windows-harden or independently. Baseline selection and domain profile detection are automatic; there is no dependency on hardening output, logs, or installed binaries.
 
-## Configuration and enforcement
+## ⚙️ Configuration and enforcement
 
 | Option | Default | Meaning |
 | --- | --- | --- |
@@ -72,7 +72,7 @@ The source provides no severity ratings, so every imported control is conservati
 
 The percentage is `100 × Compliant / (Compliant + NonCompliant + NotConfigured)`. No evaluated controls yields 0%, and fails any positive minimum. `NotApplicable` and `Error` never count as compliant. Audit-only execution failures are recorded and allow the build to continue. Cancellation and host-report write failures always return an error. Use distinct report paths for concurrent builds.
 
-## Report
+## 📊 Report
 
 See the versioned [JSON schema](docs/report.schema.json) and [illustrative sample](docs/sample-report.json). Findings use stable upstream control IDs, native numeric values and SID arrays, expected/actual types, read evidence, remediation, applicability, and timestamps. All selected baseline controls are included in deterministic ID order. Reports include plugin version, baseline version and exact content SHA-256, execution timing, category and severity totals, and execution errors. Unsupported OS cannot select a baseline and therefore has an empty findings array with an explicit execution error.
 
@@ -86,7 +86,7 @@ See the versioned [JSON schema](docs/report.schema.json) and [illustrative sampl
 
 The report is downloaded through Packer's communicator, assembled on the host, written to a sibling temporary file, synced, closed, and atomically renamed before enforcement. Existing reports are replaced. Temporary exports and scripts live under a unique `C:\Windows\Temp\packer-windows-checkup-*` guest directory and are removed after reporting. Cleanup failure is logged. No credentials or session authentication data are collected in findings; raw guest exception text is suppressed from reports.
 
-## Architecture and development
+## 🛠️ Architecture and development
 
 `provisioner/` handles SDK config and orchestration; `guest/` embeds read-only Windows readers; `internal/facts/` classifies the OS; `internal/baseline/` owns the pinned contract; `internal/audit/` compares observations; `internal/report/` calculates summaries, writes JSON, and evaluates enforcement. New control types require an explicit baseline contract, reader, typed comparator, and tests. The guest has no apply or rollback path.
 
@@ -102,7 +102,7 @@ pwsh -NoProfile -File scripts/test-powershell.ps1
 
 If the normal Go build cache is unavailable, set `$env:GOCACHE = Join-Path (Get-Location) '.cache/go-build'`. CI checks formatting, Go vet static analysis, tests, PowerShell parsing and analysis, plugin describe, Packer configuration, and host-platform compilation. Tagged releases use GoReleaser with signed SHA-256 sums and draft GitHub releases, following the source project. See [live validation](test/integration/README.md); fixtures and unit tests are not evidence of a successful live WinRM audit.
 
-## Troubleshooting
+## 🔧 Troubleshooting
 
 For security-policy or audit errors, verify guest elevation and access to `secedit.exe` and `auditpol.exe`. Missing registry values are reported as missing, even where Windows might have a similar default: the source expects explicit policy. SID assignments use unordered, deduplicated sets and unresolved account names are errors. Services are checked for startup configuration only. Settings deferred by windows-harden to preserve WinRM may correctly remain noncompliant here; checkup never changes them.
 

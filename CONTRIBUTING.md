@@ -1,4 +1,4 @@
-# Contributing
+# 🤝 Contributing
 
 Keep changes focused, idiomatic, and read-only. Exported Go declarations require documentation. PowerShell readers need comment-based help and must support Windows PowerShell 5.1. Preserve upstream author attribution and the MPL-2.0 license on derived source. Version releases with semantic `vMAJOR.MINOR.PATCH` tags.
 

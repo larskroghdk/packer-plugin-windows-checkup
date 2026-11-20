@@ -1,4 +1,4 @@
-# Baseline contract 1.0
+# 📜 Baseline contract 1.0
 
 The authoritative contract is the JSON model in `internal/baseline/baseline.go`, imported from windows-harden without changing payload semantics. Six data files are copied byte-for-byte. Every control uses its original identifier. Profile overrides replace controls by identifier rather than introducing an additional requirement. Unknown kinds, inconsistent payloads, duplicate IDs and overlapping OS applicability fail catalog loading.
 
