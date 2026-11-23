@@ -96,11 +96,11 @@ go vet ./...
 go test ./...
 go build -ldflags '-X main.versionPrerelease=' -o bin/packer-plugin-windows-checkup.exe .
 ./bin/packer-plugin-windows-checkup.exe describe
-pwsh -NoProfile -File scripts/check-powershell.ps1
-pwsh -NoProfile -File scripts/test-powershell.ps1
+powershell.exe -NoProfile -File scripts/check-powershell.ps1
+powershell.exe -NoProfile -File scripts/test-powershell.ps1
 ```
 
-If the normal Go build cache is unavailable, set `$env:GOCACHE = Join-Path (Get-Location) '.cache/go-build'`. CI checks formatting, Go vet static analysis, tests, PowerShell parsing and analysis, plugin describe, Packer configuration, and host-platform compilation. Tagged releases use GoReleaser with signed SHA-256 sums and draft GitHub releases, following the source project. See [live validation](test/integration/README.md); fixtures and unit tests are not evidence of a successful live WinRM audit.
+If the normal Go build cache is unavailable, set `$env:GOCACHE = Join-Path (Get-Location) '.cache/go-build'`. CI checks formatting, Go vet static analysis, tests, PowerShell parsing and analysis, plugin describe, Packer configuration, and host-platform compilation. Pushing a version tag publishes a GitHub release immediately (not a draft), built by GoReleaser with a signed SHA-256 checksum file. See [live validation](test/integration/README.md); fixtures and unit tests are not evidence of a successful live WinRM audit.
 
 ## 🔧 Troubleshooting
 
