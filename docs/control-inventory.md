@@ -1,6 +1,6 @@
 # 🗂️ Complete source control inventory
 
-Source commit: `8dc70d2c81be4515ad243dfbe288d61151ab722d`. Definitions are copied byte-for-byte; hashes are in `internal/baseline/data-manifest.json`.
+Source commit: `2a3545f3a3b44c8fa84e3a22d28d999aece5daf6`. Definitions are copied byte-for-byte; hashes are in `internal/baseline/data-manifest.json`.
 
 Each row is independently read using the indicated kind. Registry controls verify stored policy, not runtime subsystem health. No extra controls are inferred. Services constrain startup type, not running state. All severities are Medium because the source provides no severity ratings.
 

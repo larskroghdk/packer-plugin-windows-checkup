@@ -1,6 +1,6 @@
 # 🧪 Implementation validation — 2026-11-20
 
-The baseline inventory was derived from windows-harden commit `8dc70d2c81be4515ad243dfbe288d61151ab722d`. Six baseline files contain 2,187 entries and 18 non-domain-joined overrides. Tests exercise every entry in both profiles, including matching values, mismatches, missing configuration, missing reader data, and reader errors. File hashes verify the source snapshot.
+The baseline inventory was derived from windows-harden commit `2a3545f3a3b44c8fa84e3a22d28d999aece5daf6`. Six baseline files contain 2,187 entries and 18 non-domain-joined overrides. Tests exercise every entry in both profiles, including matching values, mismatches, missing configuration, missing reader data, and reader errors. File hashes verify the source snapshot.
 
 ✅ **Executed successfully:**
 

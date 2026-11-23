@@ -6,7 +6,7 @@ Author: Lars Krogh. Plugin version: 0.1.0 (development). License: MPL-2.0.
 
 ## 🖥️ Baseline and supported systems
 
-The six baseline files are an exact snapshot of windows-harden commit `8dc70d2c81be4515ad243dfbe288d61151ab722d`, including its non-domain-joined overrides and Microsoft package provenance. See the [complete inventory](docs/control-inventory.md), [hash manifest](internal/baseline/data-manifest.json), and [baseline maintenance contract](docs/baseline-contract.md).
+The six baseline files are an exact snapshot of windows-harden commit `2a3545f3a3b44c8fa84e3a22d28d999aece5daf6`, including its non-domain-joined overrides and Microsoft package provenance. See the [complete inventory](docs/control-inventory.md), [hash manifest](internal/baseline/data-manifest.json), and [baseline maintenance contract](docs/baseline-contract.md).
 
 | System | Build | Baseline |
 | --- | ---: | --- |
