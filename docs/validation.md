@@ -18,4 +18,4 @@ Actual Packer validation exposed the SDK's requirement for a generated `FlatMaps
 
 The opt-in Windows integration test compiled and was **skipped** because `WINDOWS_CHECKUP_LIVE` was not set. No live Windows security audit, live WinRM build, GitHub Actions run, signed release, or publication was performed. Live validation on supported Windows OS/profile combinations remains necessary before treating the plugin as production-validated. The integration procedure and automated opt-in test are in `test/integration/`.
 
-GitHub Actions additionally defines compilation for linux/darwin/windows on amd64/arm64 and signed draft releases; those remote jobs have not been executed in this session. Unit fixtures are not evidence of successful live validation.
+GitHub Actions additionally defines compilation for linux/darwin/windows on amd64/arm64 and signed public plugin releases; those remote jobs have not been executed in this session. Unit fixtures are not evidence of successful live validation.
