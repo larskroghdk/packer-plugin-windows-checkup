@@ -32,7 +32,7 @@ func New(version string) *Provisioner { return &Provisioner{version: version} }
 //   - The requested result and any validation or I/O error.
 //
 // Author: Lars Krogh
-// Version: 0.1.0
+// Version: 0.1.1
 func (p *Provisioner) Provision(ctx context.Context, ui packer.Ui, comm packer.Communicator, generatedData map[string]any) error {
 	r := &report.Report{SchemaVersion: "1.0", Plugin: "packer-plugin-windows-checkup", PluginVersion: p.version, StartedAt: time.Now().UTC(), SourceCommit: baseline.SourceCommit}
 	remote := newRemote(comm, ui, uuid.TimeOrderedUUID())
@@ -48,7 +48,7 @@ func (p *Provisioner) Provision(ctx context.Context, ui packer.Ui, comm packer.C
 	cleanupCtx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
 	defer cancel()
 	if err := remote.cleanup(cleanupCtx); err != nil {
-		ui.Message("Could not remove temporary checkup files from guest")
+		ui.Error(fmt.Sprintf("Warning: could not remove the temporary checkup files from the guest: %v", err))
 	}
 	if ctx.Err() != nil {
 		return ctx.Err()

@@ -40,6 +40,13 @@ jobs:
           $unformatted = @(gofmt -l $files)
           if ($unformatted.Count) { throw ($unformatted -join "`n") }
       - run: go vet ./...
+      - name: Static analysis and vulnerability scan
+        if: runner.os == 'Linux'
+        env:
+          GOTOOLCHAIN: local
+        run: |
+          go run honnef.co/go/tools/cmd/staticcheck@2025.1.1 ./...
+          go run golang.org/x/vuln/cmd/govulncheck@v1.10.0 ./...
       - run: go run ./cmd/doccheck main.go provisioner internal guest cmd test
       - name: Report schema
         shell: pwsh

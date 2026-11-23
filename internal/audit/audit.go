@@ -3,6 +3,7 @@ package audit
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"reflect"
 	"sort"
@@ -158,13 +159,13 @@ func Evaluate(b *baseline.Baseline, profile baseline.Profile, states map[string]
 //   - The requested result and any validation or I/O error.
 //
 // Author: Lars Krogh
-// Version: 0.1.0
+// Version: 0.1.1
 func actual(s baseline.Setting, st State) (any, error) {
 	v := *st.Value
 	switch s.Kind {
 	case baseline.KindRegistry:
 		if st.Type == nil {
-			return nil, fmt.Errorf("Registry reader omitted the value type")
+			return nil, errors.New("the registry reader omitted the value type")
 		}
 		if *st.Type == baseline.RegDWORD {
 			n, e := strconv.ParseUint(v, 10, 32)
@@ -175,7 +176,7 @@ func actual(s baseline.Setting, st State) (any, error) {
 		values := sidSet(v)
 		for _, sid := range values {
 			if !strings.HasPrefix(sid, "S-1-") {
-				return nil, fmt.Errorf("Unresolved user-right principal")
+				return nil, errors.New("a user-right principal is not a resolved SID")
 			}
 		}
 		return values, nil
