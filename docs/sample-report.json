@@ -57,9 +57,7 @@
       "severity": "Medium",
       "supportedOperatingSystems": {
         "product_type": "server",
-        "builds": [
-          20348
-        ]
+        "builds": [20348]
       },
       "expectedValue": 0,
       "actualValue": 0,
@@ -91,9 +89,7 @@
       "severity": "Medium",
       "supportedOperatingSystems": {
         "product_type": "server",
-        "builds": [
-          20348
-        ]
+        "builds": [20348]
       },
       "expectedValue": 1,
       "actualValue": 999,
@@ -125,9 +121,7 @@
       "severity": "Medium",
       "supportedOperatingSystems": {
         "product_type": "server",
-        "builds": [
-          20348
-        ]
+        "builds": [20348]
       },
       "expectedValue": 0,
       "actualValue": null,

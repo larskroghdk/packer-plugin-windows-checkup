@@ -40,12 +40,7 @@
     "operatingSystem": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "caption",
-        "build",
-        "architecture",
-        "product_type"
-      ],
+      "required": ["caption", "build", "architecture", "product_type"],
       "properties": {
         "product_name": {
           "type": "string"
@@ -214,12 +209,7 @@
           },
           "severity": {
             "type": "string",
-            "enum": [
-              "Low",
-              "Medium",
-              "High",
-              "Critical"
-            ]
+            "enum": ["Low", "Medium", "High", "Critical"]
           },
           "status": {
             "type": "string",
@@ -245,16 +235,10 @@
           },
           "supportedOperatingSystems": {
             "type": "object",
-            "required": [
-              "product_type",
-              "builds"
-            ],
+            "required": ["product_type", "builds"],
             "properties": {
               "product_type": {
-                "enum": [
-                  "server",
-                  "workstation"
-                ]
+                "enum": ["server", "workstation"]
               },
               "builds": {
                 "type": "array",
@@ -265,10 +249,7 @@
             }
           },
           "remediation": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": ["string", "null"]
           }
         }
       }

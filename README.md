@@ -8,16 +8,19 @@ Author: Lars Krogh. Plugin version: 0.1.0 (development). License: MPL-2.0.
 
 The six baseline files are an exact snapshot of windows-harden commit `2a3545f3a3b44c8fa84e3a22d28d999aece5daf6`, including its non-domain-joined overrides and Microsoft package provenance. See the [complete inventory](docs/control-inventory.md), [hash manifest](internal/baseline/data-manifest.json), and [baseline maintenance contract](docs/baseline-contract.md).
 
-| System | Build | Baseline |
-| --- | ---: | --- |
-| Windows Server 2019 member server | 17763 | ws2019-member |
-| Windows Server 2022 | 20348 | ws2022 |
-| Windows Server 2025 | 26100 | ws2025-2602 |
-| Windows 11 24H2 | 26100 | win11-24h2 |
-| Windows 11 25H2 | 26200 | win11-25h2 |
-| Windows 11 26H2 | 26300 | win11-26h2 |
+| Baseline ID | OS | Build |
+| --- | --- | --- |
+| `ws2019-member` | Windows Server 2019, workgroup or member server | 17763 |
+| `ws2022` | Windows Server 2022, workgroup or member server | 20348 |
+| `ws2025-2602` | Windows Server 2025, workgroup or member server | 26100 |
+| `win11-24h2` | Windows 11 24H2: Enterprise, Enterprise multi-session, Education and IoT Enterprise only, because Home and Pro reached end of updates on 2026-10-13 | 26100 |
+| `win11-24h2` | Windows 11 Enterprise LTSC 2024 (until 2029-10-09) and IoT Enterprise LTSC 2024 (until 2034-10-10), which Microsoft lists as equivalent to 24H2 | 26100 |
+| `win11-25h2` | Windows 11 25H2 | 26200 |
+| `win11-26h2` | Windows 11 26H2 | 26300 |
 
-Selection follows the source's lifecycle table and edition restrictions at execution time. For example, Windows 11 24H2 consumer editions are already out of support on 2026-11-20; Enterprise/Education remain eligible until their pinned support date. Windows 11 Enterprise LTSC 2024 (until 2029-10-09) and IoT Enterprise LTSC 2024 (until 2034-10-10) are build 26100, which Microsoft lists as equivalent to 24H2, so they are audited against `win11-24h2`. Domain controllers and LTSC editions on a build without a known LTSC release, such as Windows 10 Enterprise LTSC 2021, are excluded. Server 2016 and Windows 10 have lifecycle entries but no implemented baseline. Unsupported systems produce an execution error and no claimed compliance.
+A release is audited only until its end of updates, the same as windows-harden hardens it. The dates are in [lifecycle.go](internal/facts/lifecycle.go) and follow [Windows 11 release information](https://learn.microsoft.com/windows/release-health/windows11-release-information), [supported versions of Windows client](https://learn.microsoft.com/windows/release-health/supported-versions-windows-client) for LTSC, and the Windows Server lifecycle.
+
+🚫 Domain controllers, releases past end of updates, and releases without a baseline here (such as Windows Server 2016, Windows 11 26H1 and Windows 10 Enterprise LTSC 2021) are rejected. Unsupported systems produce an execution error and no claimed compliance.
 
 The audit verifies exactly what the hardening plugin configures: registry values and types, local account policies, SID assignments, advanced audit subcategories, and service startup types. Defender, firewall, SMB, TLS, and authentication policies are covered where present in those definitions. The source does not implement independent optional-feature, firewall-rule, service-running-state, or runtime Defender health requirements. Stored policy compliance does not establish effective runtime health or prove that domain policy will not override it later. Registry absence is compliant only for an explicit `ABSENT` requirement. An absent service is `NotApplicable` after the reader verifies the service key is absent.
 
