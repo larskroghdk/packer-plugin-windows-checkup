@@ -1,6 +1,6 @@
 {
   "contractVersion": "1.0",
-  "sourceCommit": "8dc70d2c81be4515ad243dfbe288d61151ab722d",
+  "sourceCommit": "2a3545f3a3b44c8fa84e3a22d28d999aece5daf6",
   "files": {
     "win11-24h2.json": "f689c4fe0dfc40e87d2860e3c42e989142c7b0200252c601d590bd189e513494",
     "win11-25h2.json": "4d432143c1faa591421dbe90bcf2576fa4963a6175f97af8da012954c02f02d2",

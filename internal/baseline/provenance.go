@@ -6,7 +6,7 @@ import (
 )
 
 // SourceCommit pins the authoritative windows-harden snapshot.
-const SourceCommit = "8dc70d2c81be4515ad243dfbe288d61151ab722d"
+const SourceCommit = "2a3545f3a3b44c8fa84e3a22d28d999aece5daf6"
 
 // Fingerprint returns the SHA-256 of the exact embedded baseline JSON bytes.
 //
