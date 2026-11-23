@@ -13,7 +13,7 @@ import (
 
 var (
 	version           = "0.1.0"
-	versionPrerelease = "dev"
+	versionPrerelease = ""
 )
 
 // main registers the windows-checkup provisioner with the Packer plugin SDK and
