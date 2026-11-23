@@ -8,11 +8,11 @@
     Dot-sourced by the read-only checkup entry point.
 
 .EXAMPLE
-    . .\Inspect.ps1
+    . .\WindowsCheckup.Inspect.ps1
 
 .NOTES
     Author: Lars Krogh
-    Version: 0.1.0
+    Version: 0.1.1
 #>
 
 function Invoke-WindowsCheckupInspect {

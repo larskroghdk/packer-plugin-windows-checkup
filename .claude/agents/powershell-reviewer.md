@@ -4,6 +4,6 @@ description: Review requested guest PowerShell changes in windows-checkup for Wi
 tools: Read, Glob, Grep
 ---
 
-Read `AGENTS.md` (PowerShell and Checks sections), `INVARIANTS.md` and any `AGENTS.md` in the directory under review. Paths are relative to the repository root.
+Read `AGENTS.md` (PowerShell and Checks sections), `INVARIANTS.md` and any `AGENTS.md` in the directory under review. Read `.agents/skills/code-review/SKILL.md` and `.agents/skills/powershell-development/SKILL.md` for the task procedure. Paths are relative to the repository root.
 
 Review only the requested scope. For each finding, give the severity, the file and line, the input or state that triggers it, the consequence, and a proposed fix. Name missing checks, and keep mocked or simulated test results separate from live WinRM evidence. Stay read-only: return findings to the parent instead of editing files, running guest operations or publishing.

@@ -23,13 +23,7 @@ Baseline updates follow [docs/baseline-contract.md](docs/baseline-contract.md). 
 - Use the Go version in [go.mod](go.mod). Keep communicator use in `provisioner/remote.go`. Pass guest input as JSON files, never by interpolating it into PowerShell command text.
 - Pass the caller's context. The report is written even when the run fails, and cancellation and report-write failures always return errors.
 - Document every function as INVARIANTS.md describes.
-- After changing a `mapstructure` field, regenerate `provisioner/config.hcl2spec.go` with the pinned SDK generator. Don't edit it by hand:
-
-  ```powershell
-  go install github.com/hashicorp/packer-plugin-sdk/cmd/packer-sdc@v0.6.13
-  $env:GOFILE = 'config.go'; $env:GOPACKAGE = 'provisioner'
-  Push-Location provisioner; packer-sdc mapstructure-to-hcl2 -type Config; Pop-Location
-  ```
+- After changing a `mapstructure` field, regenerate `provisioner/config.hcl2spec.go` with `make generate`, which installs the SDK generator at the version in go.mod. Don't edit it by hand.
 
 ## PowerShell
 
@@ -39,25 +33,40 @@ Baseline updates follow [docs/baseline-contract.md](docs/baseline-contract.md). 
 
 ## Checks
 
-CI is [.github/workflows/check.yml](.github/workflows/check.yml). Before committing, run:
+CI is [.github/workflows/build.yml](.github/workflows/build.yml), and it runs the [Makefile](Makefile) targets. Before committing, run:
 
-```powershell
-gofmt -l $(git ls-files '*.go')            # must print nothing
-go mod tidy -diff
-go vet ./...
-go run honnef.co/go/tools/cmd/staticcheck@2025.1.1 ./...
-go run golang.org/x/vuln/cmd/govulncheck@v1.10.0 ./...
-go run ./cmd/doccheck main.go provisioner internal guest cmd test
-go test ./...
-go build -ldflags '-X main.versionPrerelease=' -o bin/packer-plugin-windows-checkup.exe .
-powershell.exe -NoProfile -File scripts/check-powershell.ps1   # PSScriptAnalyzer 1.22.0
-powershell.exe -NoProfile -File scripts/test-powershell.ps1    # Pester 5.6.1
+```sh
+make check            # formatting, tidy, doccheck, staticcheck, PSScriptAnalyzer 1.22.0, packer fmt, actionlint,
+                      # build and vet, govulncheck, report schema, go test, Pester 5.6.1 (guest and agent), build
+make generate-check   # after changing a mapstructure field
+make validate         # after configuration changes: installs the built plugin and runs packer validate examples/local
 ```
 
-For report changes, validate the sample report against the schema. For configuration changes, install the built plugin and run `packer validate examples/local`, as CI does. Normal tests never audit or change the development host's policy. Mocked tests don't show live WinRM behavior, so report them separately from live results.
+The guest Pester tests run under Windows PowerShell 5.1 (`make test-ps`), the agent workflow tests under PowerShell 7 (`make test-ai`). Normal tests never audit or change the development host's policy. Mocked tests don't show live WinRM behavior, so report them separately from live results.
+
+## Agent workflow
+
+Four agents work on this repository with fixed roles. [docs/ai-development.md](docs/ai-development.md) covers setup, the scripts and troubleshooting.
+
+| Agent | Role | When |
+| --- | --- | --- |
+| Claude Code | Lead developer: decides the design, writes code and tests, coordinates the others, fixes review findings | Always |
+| Gemini CLI | Read-only research and architecture challenges, through `scripts/ai/Invoke-GeminiResearch.ps1` | Major features, design decisions, dependency choices, hard problems |
+| GitHub Copilot CLI | Documentation and `.github/` automation, through `scripts/ai/Invoke-CopilotMaintenance.ps1` | When docs or workflows must change |
+| Codex CLI | Independent reviewer of every changeset, through the pre-commit hook | Every commit |
+
+- Run the deterministic checks before asking for a review. The pre-commit hook runs the matching checks from `scripts/ai/settings.psd1` and then Codex on the exact staged snapshot. A commit is allowed only when Codex approves that changeset and reports no critical or high finding.
+- An approval belongs to one changeset (base tree and result tree). Any change to the staged content needs a new review. The pre-push hook blocks commits without an approval; review them with `Invoke-CodexReview.ps1 -Commit <sha>`.
+- Never bypass the hooks (`--no-verify`, `core.hooksPath` overrides) and never write to `.git/ai`. A failed or unavailable review blocks the commit. Fix the findings and commit again.
+- Only Claude starts the other agents, and only through the scripts in `scripts/ai`. The agents those scripts start never start further agents and never commit or push; the scripts and hooks refuse to run under them (`AI_AGENT_ACTIVE`).
+- When reviewing as Codex, report findings only. Don't edit files.
 
 ## Skills
 
+- [go-development](.agents/skills/go-development/SKILL.md): Go changes to configuration, orchestration, comparison, classification and reporting.
+- [powershell-development](.agents/skills/powershell-development/SKILL.md): the read-only guest readers and their Pester tests.
+- [code-review](.agents/skills/code-review/SKILL.md): explicit reviews, audits and test-quality work.
+- [update-baseline](.agents/skills/update-baseline/SKILL.md): aligning baseline data and the lifecycle table with windows-harden.
 - [release-plugin](.agents/skills/release-plugin/SKILL.md): CI failures, packaging and authorized signed releases.
 
 Activating a skill grants no authority to publish or to operate on a guest. [docs/agent-guidance.md](docs/agent-guidance.md) explains how each tool finds these files.

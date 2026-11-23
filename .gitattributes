@@ -3,3 +3,4 @@
 *.ps1 text eol=lf
 *.sh text eol=lf
 internal/baseline/data/*.json -text whitespace=cr-at-eol
+.githooks/* text eol=lf

@@ -21,7 +21,7 @@
 
 .NOTES
     Author: Lars Krogh
-    Version: 0.1.0
+    Version: 0.1.1
 #>
 
 [CmdletBinding()]
@@ -42,10 +42,9 @@ Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'
 
-foreach ($part in 'NativeCommand', 'Registry', 'SecurityPolicy', 'AuditPolicy', 'Services') {
+foreach ($part in 'NativeCommand', 'Registry', 'SecurityPolicy', 'AuditPolicy', 'Services', 'Inspect') {
     . (Join-Path $PSScriptRoot "WindowsCheckup.$part.ps1")
 }
-. (Join-Path $PSScriptRoot 'Inspect.ps1')
 
 $workDirectory = Split-Path -Parent $OutputPath
 

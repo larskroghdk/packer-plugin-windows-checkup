@@ -90,14 +90,10 @@ The report is downloaded through Packer's communicator, assembled on the host, w
 
 `provisioner/` handles SDK config and orchestration; `guest/` embeds read-only Windows readers; `internal/facts/` classifies the OS; `internal/baseline/` owns the pinned contract; `internal/audit/` compares observations; `internal/report/` calculates summaries, writes JSON, and evaluates enforcement. New control types require an explicit baseline contract, reader, typed comparator, and tests. The guest has no apply or rollback path.
 
-```powershell
-gofmt -w main.go provisioner internal guest
-go vet ./...
-go test ./...
-go build -ldflags '-X main.versionPrerelease=' -o bin/packer-plugin-windows-checkup.exe .
-./bin/packer-plugin-windows-checkup.exe describe
-powershell.exe -NoProfile -File scripts/check-powershell.ps1
-powershell.exe -NoProfile -File scripts/test-powershell.ps1
+```sh
+make fmt        # gofmt and packer fmt
+make check      # every check CI runs, ending with a build into bin/
+make validate   # install the built plugin and validate examples/local
 ```
 
 If the normal Go build cache is unavailable, set `$env:GOCACHE = Join-Path (Get-Location) '.cache/go-build'`. CI checks formatting, Go vet static analysis, tests, PowerShell parsing and analysis, plugin describe, Packer configuration, and host-platform compilation. Pushing a version tag publishes a GitHub release immediately (not a draft), built by GoReleaser with a signed SHA-256 checksum file. See [live validation](test/integration/README.md); fixtures and unit tests are not evidence of a successful live WinRM audit.

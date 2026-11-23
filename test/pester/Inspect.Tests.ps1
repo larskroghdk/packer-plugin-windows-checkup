@@ -2,13 +2,13 @@
 
 <#
 .SYNOPSIS
-    Tests read-only policy parsing without reading or changing host security policy.
+    Pester tests for WindowsCheckup.Inspect.ps1.
 
 .DESCRIPTION
-    Uses exported policy fixtures and an isolated PowerShell environment.
+    Mocks the registry root and the policy exports, so no host security policy is read or changed.
 
 .EXAMPLE
-    Invoke-Pester test/pester
+    Invoke-Pester -Path test/pester/Inspect.Tests.ps1
 
 .NOTES
     Author: Lars Krogh
@@ -20,7 +20,7 @@ BeforeAll {
     . (Join-Path $root 'WindowsCheckup.Registry.ps1')
     . (Join-Path $root 'WindowsCheckup.SecurityPolicy.ps1')
     . (Join-Path $root 'WindowsCheckup.AuditPolicy.ps1')
-    . (Join-Path $root 'Inspect.ps1')
+    . (Join-Path $root 'WindowsCheckup.Inspect.ps1')
 }
 
 Describe 'Inspection working directory' {
@@ -81,28 +81,5 @@ Describe 'Inspection working directory' {
         $result[0].error | Should -Be 'fixture failure'
         $result[1].error | Should -BeNullOrEmpty
         $result[1].value | Should -Be '3'
-    }
-}
-
-Describe 'Security policy readers' {
-    It 'Parses account policy values and unordered SID assignments' {
-        $policy = ConvertFrom-WindowsCheckupSecurityTemplate -Text "[System Access]`r`nMinimumPasswordLength = 14`r`n[Privilege Rights]`r`nSeNetworkLogonRight = *S-1-5-32-544,*S-1-5-11,*S-1-5-11"
-        (Get-WindowsCheckupAccountPolicy -Policy $policy -Name MinimumPasswordLength).value | Should -Be '14'
-        (Get-WindowsCheckupUserRight -Policy $policy -Right SeNetworkLogonRight).value | Should -Be 'S-1-5-11,S-1-5-32-544'
-    }
-    It 'Distinguishes a missing account policy from an empty user right' {
-        $policy = ConvertFrom-WindowsCheckupSecurityTemplate -Text '[System Access]'
-        (Get-WindowsCheckupAccountPolicy -Policy $policy -Name Missing).present | Should -BeFalse
-        $right = Get-WindowsCheckupUserRight -Policy $policy -Right SeBackupPrivilege
-        $right.present | Should -BeTrue
-        $right.value | Should -Be ''
-    }
-    It 'Preserves unsigned DWORD bit patterns' {
-        (ConvertTo-WindowsCheckupUInt32 -Value -1) | Should -Be 4294967295
-    }
-    It 'Matches audit subcategories without depending on localized names' {
-        $policy = @{'0cce923f-69ae-11d9-bed3-505054503030' = 3 }
-        (Get-WindowsCheckupAuditSubcategory -Policy $policy -Guid '{0CCE923F-69AE-11D9-BED3-505054503030}').value | Should -Be '3'
-        (Get-WindowsCheckupAuditSubcategory -Policy $policy -Guid 'missing').present | Should -BeFalse
     }
 }

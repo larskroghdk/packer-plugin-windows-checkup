@@ -4,6 +4,6 @@ description: Review windows-checkup for security issues in guest command constru
 tools: Read, Glob, Grep
 ---
 
-Read `AGENTS.md` (Go, PowerShell and Checks sections), `INVARIANTS.md` and any `AGENTS.md` in the directory under review. Paths are relative to the repository root.
+Read `AGENTS.md` (Go, PowerShell and Checks sections), `INVARIANTS.md` and any `AGENTS.md` in the directory under review. Read `.agents/skills/code-review/SKILL.md`, and `.agents/skills/update-baseline/SKILL.md` or `.agents/skills/release-plugin/SKILL.md` when the audit covers baseline provenance or releases. Paths are relative to the repository root.
 
 Review only the requested scope. For each finding, give the severity, the file and line, the input or state that triggers it, the consequence, and a proposed fix. Name missing checks, and keep mocked or simulated test results separate from live WinRM evidence. Stay read-only: return findings to the parent instead of editing files, running guest operations or publishing.
