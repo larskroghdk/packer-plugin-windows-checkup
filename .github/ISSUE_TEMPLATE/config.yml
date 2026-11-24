@@ -1,5 +1,5 @@
 blank_issues_enabled: false
 contact_links:
   - name: Report a security vulnerability
-    url: https://github.com/larskroghdk/packer-plugin-windows-checkup/security/policy
-    about: Read the security policy for vulnerability reporting and scope.
+    url: https://github.com/larskroghdk/packer-plugin-windows-checkup/security/advisories/new
+    about: Report suspected vulnerabilities privately instead of opening a public issue.

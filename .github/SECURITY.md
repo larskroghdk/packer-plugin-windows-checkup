@@ -11,7 +11,9 @@ This project is pre-1.0 and has a single release line. The latest release is sup
 
 ## Reporting a vulnerability
 
-When private vulnerability reporting is available, use "Report a vulnerability" on the Security tab. If it is not available, open a [public issue](https://github.com/larskroghdk/packer-plugin-windows-checkup/issues/new) asking the maintainer for a private channel. Do not include vulnerability details in that issue.
+Do not open a public issue, pull request or discussion.
+
+Use [private vulnerability reporting](https://github.com/larskroghdk/packer-plugin-windows-checkup/security/advisories/new) through the repository's "Report a vulnerability" button on the Security tab.
 
 Include the plugin version, Packer version and builder, guest OS and build, the provisioner block with secrets removed, and the relevant JSON report or `PACKER_LOG=1` output with secrets and sensitive host data removed. Describe steps to reproduce and the impact.
 
