@@ -1,0 +1,38 @@
+name: Feature request
+description: Suggest a baseline, Windows support, reader, report or configuration improvement.
+labels: [enhancement]
+body:
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Kind
+      options:
+        - New or updated baseline from windows-harden
+        - New Windows version or edition
+        - New control type / reader
+        - Report format or field
+        - Configuration or enforcement option
+        - Documentation
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What you're trying to do, and why the plugin doesn't support it today.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal
+      description: How the feature could work.
+  - type: markdown
+    attributes:
+      value: |
+        Baselines must come from [packer-plugin-windows-harden](https://github.com/larskroghdk/packer-plugin-windows-harden). The plugin stays read-only and does not provide remediation.
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered

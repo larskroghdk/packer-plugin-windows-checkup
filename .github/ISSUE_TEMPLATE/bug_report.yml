@@ -1,0 +1,190 @@
+name: Bug report
+description: Report an audit, report, WinRM, configuration or enforcement failure.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Issues are public. Remove credentials, tokens, host names, domain names, IP addresses, account SIDs and anything from confidential compliance reports.
+
+        Report security issues, including a `Compliant` result that hides a weaker configuration, through the [security policy](https://github.com/larskroghdk/packer-plugin-windows-checkup/security/policy) instead. Settings that windows-harden deliberately defers to keep WinRM working are expected to show as `NonCompliant`.
+  - type: input
+    id: plugin-version
+    attributes:
+      label: Plugin version
+      placeholder: v0.1.0
+    validations:
+      required: true
+  - type: input
+    id: packer-version
+    attributes:
+      label: Packer version
+      description: Output of `packer version`.
+    validations:
+      required: true
+  - type: dropdown
+    id: builder
+    attributes:
+      label: Builder
+      options:
+        - hyperv-iso
+        - hyperv-vmcx
+        - vsphere-iso
+        - vsphere-clone
+        - azure-arm
+        - qemu
+        - "null"
+        - Other
+    validations:
+      required: true
+  - type: dropdown
+    id: communicator
+    attributes:
+      label: Communicator
+      description: The plugin supports WinRM only.
+      options:
+        - WinRM over HTTPS
+        - WinRM over HTTP
+    validations:
+      required: true
+  - type: dropdown
+    id: guest-os
+    attributes:
+      label: Guest OS
+      options:
+        - Windows Server 2019
+        - Windows Server 2022
+        - Windows Server 2025
+        - Windows 11 24H2
+        - Windows 11 Enterprise LTSC 2024 / IoT Enterprise LTSC 2024
+        - Windows 11 25H2
+        - Windows 11 26H2
+        - Other / unsupported
+    validations:
+      required: true
+  - type: input
+    id: guest-build
+    attributes:
+      label: Guest build
+      description: Output of `cmd /c ver` on the guest.
+      placeholder: 10.0.26100.xxxx
+    validations:
+      required: true
+  - type: input
+    id: edition
+    attributes:
+      label: Edition
+      description: For example Enterprise, Enterprise multi-session, Education, IoT Enterprise, Datacenter or Standard.
+  - type: dropdown
+    id: installation
+    attributes:
+      label: Installation type
+      options:
+        - Desktop Experience / client
+        - Server Core
+    validations:
+      required: true
+  - type: dropdown
+    id: domain-membership
+    attributes:
+      label: Domain membership
+      options:
+        - Workgroup
+        - Domain member
+    validations:
+      required: true
+  - type: dropdown
+    id: baseline-id
+    attributes:
+      label: Baseline ID
+      options:
+        - ws2019-member
+        - ws2022
+        - ws2025-2602
+        - win11-24h2
+        - win11-25h2
+        - win11-26h2
+        - None selected / execution error
+    validations:
+      required: true
+  - type: input
+    id: baseline-version
+    attributes:
+      label: baselineVersion
+      description: Copy this value from the JSON report.
+  - type: input
+    id: baseline-fingerprint
+    attributes:
+      label: baselineFingerprint
+      description: Copy this value from the JSON report.
+  - type: dropdown
+    id: problem-type
+    attributes:
+      label: Problem type
+      options:
+        - "False positive: reported NonCompliant or NotConfigured, but the setting is compliant"
+        - "False negative: reported Compliant, but the setting is not (see the security policy first)"
+        - Error status / inconclusive
+        - Unsupported OS handling
+        - Execution or WinRM failure
+        - Report file or schema
+        - Enforcement result
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: control-ids
+    attributes:
+      label: Affected control IDs
+      description: Separate multiple IDs with commas.
+  - type: textarea
+    id: config
+    attributes:
+      label: Provisioner configuration
+      description: Remove secrets and sensitive host names.
+      render: hcl
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected result
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual result
+      description: Explain how you verified the guest value, for example `reg query`, a `secedit` export, `auditpol /get` or `Get-CimInstance`.
+    validations:
+      required: true
+  - type: textarea
+    id: sanitized-findings
+    attributes:
+      label: Sanitized findings JSON
+      description: Include only affected findings and `executionErrors`, not the whole report.
+      render: json
+  - type: textarea
+    id: error-message
+    attributes:
+      label: Error message
+      description: The exact Packer error, separate from the full log.
+      render: text
+  - type: textarea
+    id: packer-log
+    attributes:
+      label: Sanitized PACKER_LOG=1 log
+      description: Remove credentials, tokens, host names and sensitive report data.
+      render: text
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Checks
+      options:
+        - label: I removed credentials, tokens, host names, domain names, IP addresses, account SIDs and sensitive compliance-report data.
+          required: true
+        - label: I reproduced this on the latest release using a disposable VM.
